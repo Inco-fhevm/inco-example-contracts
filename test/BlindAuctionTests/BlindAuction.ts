@@ -1,11 +1,9 @@
 import { expect } from "chai";
-
-import { awaitAllDecryptionResults } from "../asyncDecrypt";
 import { createInstances } from "../instance";
 import { getSigners, initSigners } from "../signers";
 import { deployBlindAuctionFixture } from "./BlindAuction.fixture";
 
-describe("Blin Auction Tests", function () {
+describe("Blind Auction Tests", function () {
   before(async function () {
     // Initialize signers before running tests
     await initSigners();
@@ -64,14 +62,14 @@ describe("Blin Auction Tests", function () {
     expect(actualBid).to.equal(bidAmount);
   });
 
-//   it("should allow the owner to stop the auction manually", async function () {
-//     // Stop the auction
-//     const stopTx = await this.auction.stop();
-//     await stopTx.wait();
+  it("should allow the owner to stop the auction manually", async function () {
+    // Stop the auction
+    const stopTx = await this.auction.stop();
+    await stopTx.wait();
 
-//     // Verify that the auction is stopped
-//     const isManuallyStopped = await this.auction.manuallyStopped();
-//     expect(isManuallyStopped).to.be.true;
-//   });
+    // Verify that the auction is stopped
+    const isManuallyStopped = await this.auction.manuallyStopped();
+    expect(expect(isManuallyStopped).to.be.true);
+  });
 
 })

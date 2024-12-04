@@ -36,10 +36,10 @@ contract ConfidentialERC20 is Ownable2Step, GatewayCaller {
         _totalSupply += mintedAmount;
         emit Mint(owner(), mintedAmount);
     }
-    
+
     // Overloaded _mint function to allow encrypted token minting
     function _mint(einput encryptedAmount, bytes calldata inputProof) public virtual onlyOwner {
-        balances[msg.sender] = TFHE.add(balances[msg.sender], TFHE.asEuint64(encryptedAmount, inputProof)); 
+        balances[msg.sender] = TFHE.add(balances[msg.sender], TFHE.asEuint64(encryptedAmount, inputProof));
         TFHE.allow(balances[msg.sender], address(this));
         TFHE.allow(balances[msg.sender], owner());
         TFHE.allow(balances[msg.sender], msg.sender);
@@ -84,7 +84,12 @@ contract ConfidentialERC20 is Ownable2Step, GatewayCaller {
     }
 
     // TransferFrom function for EOAs with encrypted inputs
-    function transferFrom(address from, address to, einput encryptedAmount, bytes calldata inputProof) public virtual returns (bool) {
+    function transferFrom(
+        address from,
+        address to,
+        einput encryptedAmount,
+        bytes calldata inputProof
+    ) public virtual returns (bool) {
         transferFrom(from, to, TFHE.asEuint64(encryptedAmount, inputProof));
         return true;
     }

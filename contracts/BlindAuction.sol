@@ -7,6 +7,7 @@ import "fhevm/gateway/GatewayCaller.sol";
 import "@openzeppelin/contracts/access/Ownable2Step.sol";
 import "./ConfidentialERC20.sol";
 
+
 /// @notice Main contract for the blind auction
 contract BlindAuction is Ownable2Step, GatewayCaller {
     /// @notice Auction end time
@@ -28,7 +29,8 @@ contract BlindAuction is Ownable2Step, GatewayCaller {
 
     /// @notice Ticket randomly sampled for each user
     /// @dev WARNING: We assume probability of duplicated tickets is null
-    /// @dev An improved implementation could sample 4 random euint64 tickets per user for negligible collision probability
+    /// @dev An improved implementation could sample 4 random euint64 tickets per user for
+    /// negligible collision probability
     mapping(address account => euint64 ticket) private userTickets;
 
     /// @notice Mapping from bidder to their bid value
@@ -77,7 +79,7 @@ contract BlindAuction is Ownable2Step, GatewayCaller {
         tokenContract = _tokenContract;
         endTime = block.timestamp + biddingTime;
         objectClaimed = TFHE.asEbool(false);
-        TFHE.allow(objectClaimed,address(this));
+        TFHE.allow(objectClaimed, address(this));
         tokenTransferred = false;
         bidCounter = 0;
         stoppable = isStoppable;
@@ -89,7 +91,7 @@ contract BlindAuction is Ownable2Step, GatewayCaller {
     /// @param inputProof Proof for the encrypted input
     function bid(einput encryptedValue, bytes calldata inputProof) external onlyBeforeEnd {
         euint64 value = TFHE.asEuint64(encryptedValue, inputProof);
-        
+
         euint64 sentBalance;
         if (TFHE.isInitialized(bids[msg.sender])) {
             euint64 existingBid = bids[msg.sender];
@@ -122,7 +124,9 @@ contract BlindAuction is Ownable2Step, GatewayCaller {
         euint64 randTicket = TFHE.randEuint64();
         euint64 userTicket;
         if (TFHE.isInitialized(highestBid)) {
-            userTicket = TFHE.select(TFHE.ne(sentBalance, 0), randTicket, userTickets[msg.sender]); // don't update ticket if sentBalance is null (or else winner sending an additional zero bid would lose the prize)
+            // don't update ticket if sentBalance is null (or else winner sending an additional
+            // zero bid would lose the prize)
+            userTicket = TFHE.select(TFHE.ne(sentBalance, 0), randTicket, userTickets[msg.sender]);
         } else {
             userTicket = randTicket;
         }
@@ -180,7 +184,9 @@ contract BlindAuction is Ownable2Step, GatewayCaller {
     }
 
     /// @notice Get the decrypted winning ticket
-    /// @dev Can only be called after the winning ticket has been decrypted - if `userTickets[account]` is an encryption of decryptedWinningTicket, then `account` won and can call `claim` succesfully
+    /// @dev Can only be called after the winning ticket has been decrypted -
+        // if `userTickets[account]` is an encryption of decryptedWinningTicket, then `account`
+        // won and can call `claim` succesfully
     /// @return The decrypted winning ticket
     function getDecryptedWinningTicket() external view returns (uint64) {
         require(decryptedWinningTicket != 0, "Winning ticket has not been decrypted yet");

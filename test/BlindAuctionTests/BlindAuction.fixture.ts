@@ -1,4 +1,3 @@
-import { AddressLike, BigNumberish, Signer } from "ethers";
 import { ethers } from "hardhat";
 
 import type { BlindAuction, ConfidentialERC20 } from "../../types";
