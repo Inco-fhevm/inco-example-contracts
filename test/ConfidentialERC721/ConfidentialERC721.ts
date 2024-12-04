@@ -1,5 +1,5 @@
 import { expect } from "chai";
-
+const path = require("path");
 import { asyncDecrypt, awaitAllDecryptionResults } from "../asyncDecrypt";
 import { createInstances } from "../instance";
 import { getSigners, initSigners } from "../signers";
@@ -49,9 +49,9 @@ describe("ConfidentialERC721 Tests", function () {
     };
     console.log("Encrypted Metadata:", encryptedMetadata);
 
-    // Step 4: Save Encrypted Metadata Locally
-    const filename = "./encrypted_pokemon_card.json";
+    const filename = path.resolve(__dirname, "encrypted_pokemon_card.json");
     fs.writeFileSync(filename, JSON.stringify(encryptedMetadata, null, 2));
+    console.log("File saved at:", filename);
 
     // Step 5: Use Sample IPFS URI
     const ipfsURI = "ipfs://sample-placeholder-uri";
