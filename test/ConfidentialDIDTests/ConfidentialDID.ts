@@ -57,7 +57,7 @@ describe("ConfidentialDID Tests", function () {
     expect(decryptedCreditScore).to.equal(creditScore);
 
     // Step 4: Verify eligibility without knowing the actual score
-    const isEligibleHandle = await this.didContract.isUserScoreAbove700(this.signers.bob.address);
+    const isEligibleHandle = await this.didContract.isUserScoreAbove750(this.signers.bob.address);
     const decryptedEligibility = await this.instances.bob.reencrypt(
       isEligibleHandle,
       privateKeyBob,
@@ -108,7 +108,7 @@ describe("ConfidentialDID Tests", function () {
     expect(decryptedCreditScore).to.equal(creditScore);
 
     // Step 4: Verify ineligibility without knowing the actual score
-    const isEligibleHandle = await this.didContract.isUserScoreAbove700(this.signers.bob.address);
+    const isEligibleHandle = await this.didContract.isUserScoreAbove750(this.signers.bob.address);
     const decryptedEligibility = await this.instances.bob.reencrypt(
       isEligibleHandle,
       privateKeyBob,

@@ -34,7 +34,7 @@ contract ConfidentialDID {
     }
 
     // External parties and smart contracts can verify that a user address has a score above 700 without knowing the actual score
-    function isUserScoreAbove700(address user) external view returns (ebool) {
+    function isUserScoreAbove750(address user) external view returns (ebool) {
         return isUserEligible[user];
     }
 
