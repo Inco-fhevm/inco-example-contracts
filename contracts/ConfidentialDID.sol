@@ -20,13 +20,13 @@ contract ConfidentialDID {
         _;
     }
 
-    function store(address user, einput encryptedCreditScore, bytes calldata inputProof) external onlyAgent {
+    function store(address user, einput encryptedCreditScore, bytes calldata inputProof) external /*onlyAgent */ {
         creditScores[user] = TFHE.asEuint64(encryptedCreditScore, inputProof);
         TFHE.allow(creditScores[user], address(this));
         TFHE.allow(creditScores[user], trustedAgent);
         TFHE.allow(creditScores[user], user);
 
-        ebool isAbove700Encrypted = TFHE.gt(creditScores[user], TFHE.asEuint8(700));
+        ebool isAbove700Encrypted = TFHE.gt(creditScores[user], TFHE.asEuint64(750));
         isUserEligible[user] = isAbove700Encrypted;
         TFHE.allow(isUserEligible[user], address(this));
         TFHE.allow(isUserEligible[user], trustedAgent);

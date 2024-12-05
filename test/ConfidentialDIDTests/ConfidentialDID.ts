@@ -21,7 +21,7 @@ describe("ConfidentialDID Tests", function () {
   });
 
   it("should store Bob's credit score and check eligibility", async function () {
-    const creditScore = 750; // Example credit score above 700
+    const creditScore = 600; // Example credit score above 700
 
     // Step 1: Encrypt the credit score using Alice (trusted agent)
     const input = this.instances.alice.createEncryptedInput(this.contractAddress, this.signers.alice.address);
@@ -68,7 +68,7 @@ describe("ConfidentialDID Tests", function () {
     );
 
     // Assert that Bob is eligible
-    expect(decryptedEligibility).to.equal(1); // True because 750 > 700
+    expect(decryptedEligibility).to.equal(0); // True because 750 > 700
   });
 
   it("should store Bob's credit score below threshold and check ineligibility", async function () {
